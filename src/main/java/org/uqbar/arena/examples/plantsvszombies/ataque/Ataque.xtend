@@ -11,7 +11,6 @@ import java.util.ArrayList
 import org.uqbar.arena.examples.plantsvszombies.recompensa.RecompensaObserver
 
 class Ataque {
-
 	Fila fila
 	Zombie zombie
 	List<RecompensaObserver> recompensaObservers = new ArrayList

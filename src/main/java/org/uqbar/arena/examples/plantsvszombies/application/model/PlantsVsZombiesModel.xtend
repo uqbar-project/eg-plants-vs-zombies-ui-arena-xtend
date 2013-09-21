@@ -4,6 +4,7 @@ import java.util.ArrayList
 import java.util.List
 import java.util.Random
 import org.uqbar.arena.examples.plantsvszombies.ataque.Ataque
+import org.uqbar.arena.examples.plantsvszombies.exception.PlantsVsZombiesException
 import org.uqbar.arena.examples.plantsvszombies.home.HomeMejoras
 import org.uqbar.arena.examples.plantsvszombies.home.HomePLantas
 import org.uqbar.arena.examples.plantsvszombies.home.HomeZombies
@@ -14,18 +15,21 @@ import org.uqbar.arena.examples.plantsvszombies.mejoras.Mejora
 import org.uqbar.arena.examples.plantsvszombies.mejoras.MejoradorDePlantas
 import org.uqbar.arena.examples.plantsvszombies.personaje.Jugador
 import org.uqbar.arena.examples.plantsvszombies.planta.Planta
+import org.uqbar.arena.examples.plantsvszombies.planta.TipoAcuatica
 import org.uqbar.arena.examples.plantsvszombies.planta.TipoDePlanta
+import org.uqbar.arena.examples.plantsvszombies.planta.TipoTerrestre
 import org.uqbar.arena.examples.plantsvszombies.recompensa.Recompensador
 import org.uqbar.arena.examples.plantsvszombies.util.Shuffle
 import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
+import org.uqbar.commons.model.UserException
 import org.uqbar.commons.utils.ApplicationContext
 import org.uqbar.commons.utils.Observable
-import org.uqbar.arena.examples.plantsvszombies.planta.TipoTerrestre
-import org.uqbar.arena.examples.plantsvszombies.planta.TipoAcuatica
 
+/**
+ * 
+ */
 @Observable
 class PlantsVsZombiesModel {
-
 	@Property Jugador jugador
 
 	//Actores principales del juego
@@ -88,6 +92,15 @@ class PlantsVsZombiesModel {
 		ataque.addRecompensaObserver(recompensaObserver)
 		ataque.comenzarAtaque
 	}
+	
+	def actualizarListaZombies() {
+		var listaDeZombies = new ArrayList<Zombie>
+		for (Zombie zombie : this.zombies.filter[z|z.estasVivo]) {
+			listaDeZombies.add(zombie)
+		}
+		this.zombies = listaDeZombies
+		this.seleccionarZombieNumeroUno
+	}
 
 	def agregarPlantasAlJardinDeJuego() {
 		var filas = jardinDeJuego.filas
@@ -124,6 +137,24 @@ class PlantsVsZombiesModel {
 		if (_zombies.size > 0)
 			_zombieSeleccionado = _zombies.get(0)
 	}
+	
+	def actualizarListaPlantas() {
+		var numeroDeFila = 0
+		if (null != this.filaSeleccionada) {
+			numeroDeFila = this.filaSeleccionada.numeroDeDFila
+		}
+
+		var filas = this.jardinDeJuego.filas as ArrayList<Fila>
+		this.jardinDeJuego.filas = null
+		this.jardinDeJuego.filas = filas
+		this.filaSeleccionada = this.jardinDeJuego.filas.get(numeroDeFila)
+
+		var plantines = this.jardinZen.plantas as ArrayList<Planta>
+		this.jardinZen.plantas = null
+		this.jardinZen.plantas = plantines
+		var last = this.jardinZen.plantas.size
+		this.plantinSeleccionado = this.jardinZen.plantas.get(last - 1)
+	}
 
 	def HomeZombies getHomeZombies() {
 		ApplicationContext::instance.getSingleton(typeof(Zombie))
@@ -159,13 +190,26 @@ class PlantsVsZombiesModel {
 	}
 
 	def ganoElJuego() {
-		0 == _zombies.size
+		_zombies.size == 0
 	}
 
 	def mejorarPlanta() {
 		var mejorador = new MejoradorDePlantas(_jugador)
 		mejorador.mejorar(plantinSeleccionado, mejoraDisponibleSeleccionada)
 		_mejorasCompradas.add(mejoraDisponibleSeleccionada)
+	}
+	
+	def plantar() {
+		try {
+			if (null == this.filaSeleccionada || null == this.columnaAPlantar) {
+				throw new UserException("Seleccione una fila y numero de casillero en donde plantar")
+			}
+			this.filaSeleccionada.agregaUnaPlantaAlCasillero(this.plantinSeleccionado, this.columnaAPlantar - 1)
+			this.actualizarListaPlantas
+
+		} catch (PlantsVsZombiesException e) {
+			throw new UserException(e.message)
+		}
 	}
 
 }

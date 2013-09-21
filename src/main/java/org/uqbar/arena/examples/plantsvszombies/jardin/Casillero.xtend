@@ -37,10 +37,7 @@ class Casillero {
 	}
 
 	def estaMuertaLaPlanta() {
-		if (estasOcupado) {
-			return !_planta.estasVivo
-		} else
-			false
+		estasOcupado && !_planta.estasVivo 
 	}
 
 }
