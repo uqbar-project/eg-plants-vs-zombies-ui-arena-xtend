@@ -1,6 +1,6 @@
 package org.uqbar.arena.examples.plantsvszombies.ui
 
-import com.uqbar.commons.StringUtils
+import org.apache.commons.lang.StringUtils
 import org.uqbar.arena.bindings.NotNullObservable
 import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombiesModel
 import org.uqbar.arena.examples.plantsvszombies.jardin.Fila
@@ -17,17 +17,12 @@ import org.uqbar.arena.widgets.tables.Table
 import org.uqbar.arena.windows.Dialog
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.WindowOwner
-import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
-import java.util.ArrayList
-import org.uqbar.commons.model.UserException
-import org.uqbar.arena.examples.plantsvszombies.exception.PlantsVsZombiesException
-import org.uqbar.arena.examples.plantsvszombies.planta.Planta
 
 class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 	new(WindowOwner parent) {
 		super(parent, new PlantsVsZombiesModel)
-		setTitle("Plantas vs Zombies")
+		title = "Plantas vs Zombies"
 		taskDescription = "Seleccione el zombie y la fila a atacar."
 	}
 
@@ -44,10 +39,11 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def addActionsPanel(Panel mainPanel) {
-		var acciones = new List<String>(mainPanel);
-		acciones.bindItemsToProperty("recompensaObserver.log");
-		acciones.setHeigth(70);
-		acciones.setWidth(150);
+		new List<String>(mainPanel) => [
+			bindItemsToProperty("recompensaObserver.log")
+			height = 70
+			width = 150
+		]
 	}
 
 	override protected addActions(Panel actionsPanel) {
@@ -58,17 +54,17 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 	def addPlantinesPanel(Panel mainPanel) {
 		//Panel de pantines
-		var plantinesPanelContenedor = new Panel(mainPanel)
+		val plantinesPanelContenedor = new Panel(mainPanel)
 		plantinesPanelContenedor.setLayout(new ColumnLayout(1))
 
-		var plantasPanel = new Panel(plantinesPanelContenedor)
+		val plantasPanel = new Panel(plantinesPanelContenedor)
 		plantasPanel.setLayout(new ColumnLayout(1))
 		new Label(plantasPanel).setText("Plantas")
 		new Label(plantasPanel).setText("Elige el plantin y la posicion")
 
-		var actionsPlantinesContenedor = new Panel(mainPanel)
+		val actionsPlantinesContenedor = new Panel(mainPanel)
 		actionsPlantinesContenedor.setLayout(new ColumnLayout(1))
-		var plantinesPanel = new Panel(actionsPlantinesContenedor)
+		val plantinesPanel = new Panel(actionsPlantinesContenedor)
 		plantinesPanel.setLayout(new ColumnLayout(5))
 
 		new Selector(plantinesPanel).allowNull(false) => [
@@ -82,7 +78,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 		new Label(plantinesPanel).setText("Columna")
 		new TextBox(plantinesPanel) => [
-			withFilter[event|StringUtils::isNumeric(event.potentialTextResult)]
+			withFilter[event|StringUtils.isNumeric(event.potentialTextResult)]
 			bindValueToProperty("columnaAPlantar")	
 		]
 
@@ -100,7 +96,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def addButtons(Panel mainPanel) {
-		var buttonsPanel = new Panel(mainPanel)
+		val buttonsPanel = new Panel(mainPanel)
 		buttonsPanel.setLayout(new ColumnLayout(7))
 		new Label(buttonsPanel).setText("Zombie:")
 		new Label(buttonsPanel).setWidth(90).bindValueToProperty("zombieSeleccionado")
@@ -112,12 +108,13 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 	def addPanelPlantasyZombies(Panel mainPanel) {
 		//Planel de plantas
-		var panelDePlantas = new Panel(mainPanel).setWidth(300)
+		val panelDePlantas = new Panel(mainPanel).setWidth(300)
 		panelDePlantas.setLayout(new ColumnLayout(2))
-		this.createResultsGrid(panelDePlantas)
+		val panelGrillaPlantas = new Panel(panelDePlantas)
+		this.createResultsGrid(panelGrillaPlantas)
 
 		//Panel ZOMBIE
-		var panelDeZombie = new Panel(panelDePlantas)
+		val panelDeZombie = new Panel(panelDePlantas)
 		panelDeZombie.setLayout(new ColumnLayout(2))
 		new Label(panelDeZombie).setText("Zombies")
 		new Label(panelDeZombie).setText("Elige el zombie y la fila")
@@ -158,7 +155,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def reiniciarJuego() {
-		var reiniciarWindow = new ConfirmacionWindow(this, modelObject)
+		val reiniciarWindow = new ConfirmacionWindow(this, modelObject)
 		reiniciarWindow.mensaje = "¿Estas seguro que deseas reiniciar el juego?"
 		reiniciarWindow.onAccept[|modelObject.inicializarElemntosDeJuego]
 		reiniciarWindow.onAccept[|modelObject.actualizarListaPlantas]
@@ -170,31 +167,30 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def protected createResultsGrid(Panel mainPanel) {
-		new Table<Fila>(mainPanel, typeof(Fila)) => [
-			heigth = 175
+		this.describeResultsGrid(new Table<Fila>(mainPanel, typeof(Fila)) => [
+			height = 375
 			width = 500
 			bindItemsToProperty("jardinDeJuego.filas")
 			bindValueToProperty("filaSeleccionada")
-			this.describeResultsGrid(it)	
-		]
+		])
 	}
 
 	def describeResultsGrid(Table<Fila> table) {
-		new Column<Fila>(table).setTitle("Terreno").setFixedSize(75).bindContentsToProperty("tipo");
+		new Column<Fila>(table).setTitle("Terreno").setFixedSize(75).bindContentsToProperty("tipo")
 
-		var cantidadDeColumnas = modelObject.jardinDeJuego.numeroDeCasillerosPorFila
+		val cantidadDeColumnas = modelObject.jardinDeJuego.numeroDeCasillerosPorFila
 		for (Integer i : 0 .. cantidadDeColumnas - 1) {
 			new Column<Fila>(table).setTitle((i + 1).toString).setWeight(50).
-				bindContentsToTransformer(new TransformerDeFila(i));
+				bindContentsToTransformer(new TransformerDeFila(i))
 		}
 	}
 
 	def finalizoElJuego() {
-		var findDelJuegoWindow = new ConfirmacionWindow(this, modelObject)
+		val findDelJuegoWindow = new ConfirmacionWindow(this, modelObject)
 		findDelJuegoWindow.onAccept[|modelObject.inicializarElemntosDeJuego]
 		findDelJuegoWindow.onAccept[|modelObject.actualizarListaPlantas]
 
-		var fin = false;
+		var fin = false
 		if (modelObject.ganoElJuego) {
 			findDelJuegoWindow.mensaje = "Felicitaciones!!! Has ganado el juego. ¿Jugar de nuevo?"
 			fin = true

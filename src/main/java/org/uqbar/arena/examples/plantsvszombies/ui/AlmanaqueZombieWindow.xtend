@@ -23,50 +23,50 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 		createFormPanel(mainPanel)
 
 		//Titulos
-		this.setTitle("Almanaque Zombie");
+		title = "Almanaque Zombie"
 	}
 
 	override protected createFormPanel(Panel mainPanel) {
-		var zombieSeleccionadoPanel = new Panel(mainPanel)
-		zombieSeleccionadoPanel.setLayout(new ColumnLayout(1))
-		new Label(zombieSeleccionadoPanel).setText("Almanaque Zombie")
+		val zombieSeleccionadoPanel = new Panel(mainPanel)
+		zombieSeleccionadoPanel.layout = new ColumnLayout(1)
+		new Label(zombieSeleccionadoPanel).text = "Almanaque Zombie"
 
 		//Panel general de busqueda de panel
-		var buscadorPanel = new Panel(mainPanel)
+		val buscadorPanel = new Panel(mainPanel)
 		buscadorPanel.setLayout(new ColumnLayout(2))
 
 		//Cuadro de buscador de zombies
-		var buscardorDeZombiePanel = new Panel(buscadorPanel)
-		buscardorDeZombiePanel.setLayout(new ColumnLayout(2))
-		new Label(buscardorDeZombiePanel).setText("Buscar Zombie:")
-		new TextBox(buscardorDeZombiePanel).withFilter(new ZombieSearchFilter(modelObject))
-		createResultsGrid(buscardorDeZombiePanel)
+		val buscadorDeZombiePanel = new Panel(buscadorPanel)
+		buscadorDeZombiePanel.layout = new ColumnLayout(2)
+		new Label(buscadorDeZombiePanel).text = "Buscar Zombie:"
+		new TextBox(buscadorDeZombiePanel).withFilter(new ZombieSearchFilter(modelObject))
+		createResultsGrid(new Panel(buscadorDeZombiePanel))
 
 		addBuscadorPanel(buscadorPanel)
 		addActions(mainPanel)
-
 	}
 
 	def addBuscadorPanel(Panel buscadorPanel) {
 
 		//Panel de info del zombie
-		var panelDeInfoDelZombie = new Panel(buscadorPanel)
-		panelDeInfoDelZombie.setLayout(new ColumnLayout(2))
-		new Label(panelDeInfoDelZombie).setText("Nombre:")
-		new Label(panelDeInfoDelZombie).setWidth(90).bindValueToProperty("zombieSeleccionado")
-		new Label(panelDeInfoDelZombie).setText("Ataque:")
-		new Label(panelDeInfoDelZombie).bindValueToProperty("zombieSeleccionado.potenciaDeAtaque")
-		new Label(panelDeInfoDelZombie).setText("Defensa:")
-		new Label(panelDeInfoDelZombie).bindValueToProperty("zombieSeleccionado.resistencia")
-		new Label(panelDeInfoDelZombie).bindValueToProperty("zombieSeleccionado.descripcion")
+		new Panel(buscadorPanel) => [
+			it.setLayout(new ColumnLayout(2))
+			new Label(it).setText("Nombre:")
+			new Label(it).setWidth(90).bindValueToProperty("zombieSeleccionado")
+			new Label(it).setText("Ataque:")
+			new Label(it).bindValueToProperty("zombieSeleccionado.potenciaDeAtaque")
+			new Label(it).setText("Defensa:")
+			new Label(it).bindValueToProperty("zombieSeleccionado.resistencia")
+			new Label(it).bindValueToProperty("zombieSeleccionado.descripcion")
+		]
 
 	}
 
 	override addActions(Panel mainPanel) {
-		var panelDeBotones = new Panel(mainPanel)
-		panelDeBotones.setLayout(new ColumnLayout(2))
-		var botonera = new Panel(panelDeBotones)
-		botonera.setLayout(new ColumnLayout(2))
+		val panelDeBotones = new Panel(mainPanel)
+		panelDeBotones.layout = new ColumnLayout(2)
+		val botonera = new Panel(panelDeBotones)
+		botonera.layout = new ColumnLayout(2)
 		new Button(botonera).setCaption("JardinZen").onClick[|irAlJardinZen()]
 		new Button(botonera).setAsDefault.setCaption("Jugar").onClick[|salir]
 	}
@@ -94,16 +94,17 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	def protected createResultsGrid(Panel mainPanel) {
-		var table = new Table<Zombie>(mainPanel, typeof(Zombie))
-		table.heigth = 160
-		table.width = 120
-		table.bindItemsToProperty("zombies")
-		table.bindValueToProperty("zombieSeleccionado")
+		val table = new Table<Zombie>(mainPanel, typeof(Zombie)) => [
+			height = 160
+			width = 120
+			bindItemsToProperty("zombies")
+			bindValueToProperty("zombieSeleccionado")
+		]
 		this.describeResultsGrid(table)
 	}
 
 	def describeResultsGrid(Table<Zombie> table) {
-		new Column<Zombie>(table).setTitle("Zombie").setFixedSize(75).bindContentsToProperty("nombre").setWeight(70)
+		new Column<Zombie>(table).setTitle("Zombie").setFixedSize(75).bindContentsToProperty("nombre")
 	}
 
 }
