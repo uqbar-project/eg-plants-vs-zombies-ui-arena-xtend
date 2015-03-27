@@ -3,6 +3,7 @@ package org.uqbar.arena.examples.plantsvszombies.ui
 import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombiesModel
 import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
 import org.uqbar.arena.layout.ColumnLayout
+import org.uqbar.arena.layout.HorizontalLayout
 import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Label
 import org.uqbar.arena.widgets.Panel
@@ -27,39 +28,35 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	override protected createFormPanel(Panel mainPanel) {
-		val zombieSeleccionadoPanel = new Panel(mainPanel)
-		zombieSeleccionadoPanel.layout = new ColumnLayout(1)
-		new Label(zombieSeleccionadoPanel).text = "Almanaque Zombie"
 
 		//Panel general de busqueda de panel
 		val buscadorPanel = new Panel(mainPanel)
-		buscadorPanel.setLayout(new ColumnLayout(2))
 
 		//Cuadro de buscador de zombies
 		val buscadorDeZombiePanel = new Panel(buscadorPanel)
-		buscadorDeZombiePanel.layout = new ColumnLayout(2)
+		buscadorDeZombiePanel.layout = new HorizontalLayout
 		new Label(buscadorDeZombiePanel).text = "Buscar Zombie:"
 		new TextBox(buscadorDeZombiePanel).withFilter(new ZombieSearchFilter(modelObject))
-		createResultsGrid(new Panel(buscadorDeZombiePanel))
 
-		addBuscadorPanel(buscadorPanel)
+		val busquedaPanel = new Panel(buscadorPanel)
+		busquedaPanel.layout = new HorizontalLayout
+		createResultsGrid(new Panel(busquedaPanel))
+		val detalleZombiPanel = new Panel(busquedaPanel)
+		detalleZombiPanel.layout = new ColumnLayout(2)
+		addBuscadorPanel(detalleZombiPanel)
+
 		addActions(mainPanel)
 	}
 
 	def addBuscadorPanel(Panel buscadorPanel) {
 
 		//Panel de info del zombie
-		new Panel(buscadorPanel) => [
-			it.setLayout(new ColumnLayout(2))
-			new Label(it).setText("Nombre:")
-			new Label(it).setWidth(90).bindValueToProperty("zombieSeleccionado")
-			new Label(it).setText("Ataque:")
-			new Label(it).bindValueToProperty("zombieSeleccionado.potenciaDeAtaque")
-			new Label(it).setText("Defensa:")
-			new Label(it).bindValueToProperty("zombieSeleccionado.resistencia")
-			new Label(it).bindValueToProperty("zombieSeleccionado.descripcion")
-		]
-
+		new Label(buscadorPanel).setText("Nombre:")
+		new Label(buscadorPanel).setWidth(90).bindValueToProperty("zombieSeleccionado")
+		new Label(buscadorPanel).setText("Ataque:")
+		new Label(buscadorPanel).bindValueToProperty("zombieSeleccionado.potenciaDeAtaque")
+		new Label(buscadorPanel).setText("Defensa:")
+		new Label(buscadorPanel).bindValueToProperty("zombieSeleccionado.resistencia")
 	}
 
 	override addActions(Panel mainPanel) {

@@ -5,6 +5,7 @@ import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombie
 import org.uqbar.arena.examples.plantsvszombies.exception.PlantsVsZombiesException
 import org.uqbar.arena.examples.plantsvszombies.mejoras.Mejora
 import org.uqbar.arena.layout.ColumnLayout
+import org.uqbar.arena.layout.HorizontalLayout
 import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Label
 import org.uqbar.arena.widgets.Panel
@@ -19,6 +20,7 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 	new(WindowOwner owner, PlantsVsZombiesModel model) {
 		super(owner, model)
 		title = "Mejoras"
+		
 	}
 
 	override def createMainTemplate(Panel mainPanel) {
@@ -50,14 +52,16 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 
 	def crearTablasDeMejoras(Panel mainPanel) {
 		val tablesPanel = new Panel(mainPanel)
-		tablesPanel.layout = new ColumnLayout(2)
+		tablesPanel.layout = new HorizontalLayout	
 
-		new Label(tablesPanel).text = "Mejoras Disponibles"
-		new Label(tablesPanel).text = "Mejoras Compradas"
-
-		val tableDisponibles = createResultsGridMejoras(new Panel(tablesPanel), "mejoras", "mejoraDisponibleSeleccionada", 320)
+		val panelIzquierdo = new Panel(tablesPanel)
+		new Label(panelIzquierdo).text = "Mejoras Disponibles"
+		val tableDisponibles = createResultsGridMejoras(panelIzquierdo, "mejoras", "mejoraDisponibleSeleccionada", 270)
 		describeResultsGridDisponibles(tableDisponibles)
-		val tableCompradas = createResultsGridMejoras(new Panel(tablesPanel), "mejorasCompradas", "mejoraCompradaSeleccionada", 320)
+		
+		val panelDerecho = new Panel(tablesPanel)
+		new Label(panelDerecho).text = "Mejoras Compradas"
+		val tableCompradas = createResultsGridMejoras(panelDerecho, "mejorasCompradas", "mejoraCompradaSeleccionada", 320)
 		describeResultsGridCompradas(tableCompradas)
 	}
 
