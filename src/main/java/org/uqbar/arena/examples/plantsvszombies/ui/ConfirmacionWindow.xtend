@@ -25,15 +25,22 @@ class ConfirmacionWindow extends Dialog<PlantsVsZombiesModel> {
 	override protected createFormPanel(Panel mainPanel) {
 		setTitle(titulo)
 	
-		mainPanel.setLayout(new ColumnLayout(1))
+		mainPanel.layout = new ColumnLayout(1)
 		new Label(mainPanel).text = mensaje
 
 		var buttonsPanel = new Panel(mainPanel)
 		buttonsPanel.layout = new ColumnLayout(3)
 
-		new Label(buttonsPanel).setWidth(65) //Label utilizado para desplazar los botones hacia el centro de la pantalla
-		new Button(buttonsPanel).setAsDefault.setCaption(cancelar).onClick[|this.cancel]
-		new Button(buttonsPanel).setCaption(aceptar).onClick[|this.accept]
+		new Label(buttonsPanel).width = 65 //Label utilizado para desplazar los botones hacia el centro de la pantalla
+		new Button(buttonsPanel) => [
+			setAsDefault
+			caption = cancelar
+			onClick[|this.cancel]
+		]
+		new Button(buttonsPanel) => [
+			caption = aceptar
+			onClick[|this.accept]
+		]
 	}
 
 	override protected ErrorsPanel createErrorsPanel(Panel mainPanel) {

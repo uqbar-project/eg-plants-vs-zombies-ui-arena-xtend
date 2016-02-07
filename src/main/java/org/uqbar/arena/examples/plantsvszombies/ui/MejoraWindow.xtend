@@ -15,6 +15,8 @@ import org.uqbar.arena.windows.Dialog
 import org.uqbar.arena.windows.WindowOwner
 import org.uqbar.commons.model.UserException
 
+import static extension org.uqbar.arena.xtend.ArenaXtendExtensions.*
+
 class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 
 	new(WindowOwner owner, PlantsVsZombiesModel model) {
@@ -35,19 +37,28 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 
 	def createHead(Panel mainPanel) {
 		val headPanel = new Panel(mainPanel)
-		headPanel.setLayout(new ColumnLayout(2))
+		headPanel.layout = new ColumnLayout(2)
 
-		new Label(headPanel).setText("Estas mejorando la planta:")
-		new Label(headPanel).bindValueToProperty("plantinSeleccionado")
+		new Label(headPanel).text = "Estas mejorando la planta:"
+		new Label(headPanel).value <=> "plantinSeleccionado"
 
-		new Label(headPanel).setText("Poder Ofensivo:")
-		new Label(headPanel).setWidth(50).bindValueToProperty("plantinSeleccionado.potenciaDeAtaque")
+		new Label(headPanel).text = "Poder Ofensivo:"
+		new Label(headPanel) => [
+			width = 50
+			value <=> "plantinSeleccionado.potenciaDeAtaque"
+		]
 
-		new Label(headPanel).setText("Poder Defensivo:")
-		new Label(headPanel).setWidth(50).bindValueToProperty("plantinSeleccionado.resistencia")
+		new Label(headPanel).text = "Poder Defensivo:"
+		new Label(headPanel) => [
+			width = 50
+			value <=> "plantinSeleccionado.resistencia"
+		]
 
-		new Label(headPanel).setText("Recursos:")
-		new Label(headPanel).setWidth(50).bindValueToProperty("jugador.recursos")
+		new Label(headPanel).text = "Recursos:"
+		new Label(headPanel) => [
+			width = 50
+			value <=> "jugadorActual.recursos"
+		]
 	}
 
 	def crearTablasDeMejoras(Panel mainPanel) {
@@ -69,31 +80,52 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 		new Table<Mejora>(mainPanel, typeof(Mejora)) => [
 			height = 180
 			width = aWith
-			bindItemsToProperty(itemProperty)
-			bindValueToProperty(valueProperty)
+			items <=> itemProperty
+			value <=> valueProperty
 		]
 	}
 
 	def describeResultsGridDisponibles(Table<Mejora> table) {
-		new Column<Mejora>(table).setTitle("Mejora").bindContentsToProperty("nombre")
-		new Column<Mejora>(table).setTitle("Costo").setFixedSize(70).bindContentsToProperty("costo")
+		new Column<Mejora>(table) => [
+			title = "Mejora"
+			bindContentsToProperty("nombre")
+		]
+		new Column<Mejora>(table) => [
+			title = "Costo"
+			fixedSize = 70
+			bindContentsToProperty("costo")
+		]
 	}
 
 	def describeResultsGridCompradas(Table<Mejora> table) {
-		new Column<Mejora>(table).setTitle("Mejora").bindContentsToProperty("nombre")
+		new Column<Mejora>(table) => [
+			title = "Mejora"
+			bindContentsToProperty("nombre")
+		]
 	}
 
 	def crearButtonAction(Panel mainPanel) {
 		val buttonPanel = new Panel(mainPanel)
-		buttonPanel.setLayout(new ColumnLayout(2))
+		buttonPanel.layout = new ColumnLayout(2)
 
 		val rightPanel = new Panel(buttonPanel)
-		rightPanel.setLayout(new ColumnLayout(3))
-		val comprarButton = new Button(rightPanel).setCaption("Comprar").onClick[|comprar]
-		comprarButton.bindEnabled(new NotNullObservable("mejoraDisponibleSeleccionada"))
-		comprarButton.disableOnError
-		new Button(rightPanel).setAsDefault().setCaption("Cerrar").onClick[|this.close]
-		new Button(rightPanel).setCaption("Jardin Zen").onClick[|verJardinZen]
+		rightPanel.layout = new ColumnLayout(3)
+		
+		val comprarButton = new Button(rightPanel) => [
+			caption = "Comprar"
+			onClick[|comprar]
+			bindEnabled(new NotNullObservable("mejoraDisponibleSeleccionada"))
+			disableOnError
+		]
+		new Button(rightPanel) => [
+			setAsDefault
+			caption = "Cerrar"
+			onClick[|this.close]
+		]
+		new Button(rightPanel) => [
+			caption = "Jardin Zen"
+			onClick[|verJardinZen] 			
+		]
 	}
 
 	def verJardinZen() {

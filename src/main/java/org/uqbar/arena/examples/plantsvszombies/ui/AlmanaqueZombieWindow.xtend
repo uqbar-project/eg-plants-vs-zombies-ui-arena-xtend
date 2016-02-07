@@ -13,6 +13,7 @@ import org.uqbar.arena.widgets.tables.Table
 import org.uqbar.arena.windows.Dialog
 import org.uqbar.arena.windows.ErrorsPanel
 import org.uqbar.arena.windows.WindowOwner
+import static extension org.uqbar.arena.xtend.ArenaXtendExtensions.*
 
 class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 
@@ -49,27 +50,38 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	def addBuscadorPanel(Panel buscadorPanel) {
-
 		//Panel de info del zombie
-		new Label(buscadorPanel).setText("Nombre:")
-		new Label(buscadorPanel).setWidth(90).bindValueToProperty("zombieSeleccionado")
-		new Label(buscadorPanel).setText("Ataque:")
-		new Label(buscadorPanel).bindValueToProperty("zombieSeleccionado.potenciaDeAtaque")
-		new Label(buscadorPanel).setText("Defensa:")
-		new Label(buscadorPanel).bindValueToProperty("zombieSeleccionado.resistencia")
+		new Label(buscadorPanel).text = "Nombre:"
+		new Label(buscadorPanel) => [
+			width = 90
+			value <=> "zombieSeleccionado"
+		]
+		new Label(buscadorPanel).text = "Ataque:"
+		new Label(buscadorPanel).value <=> "zombieSeleccionado.potenciaDeAtaque"
+		new Label(buscadorPanel).text = "Defensa:"
+		new Label(buscadorPanel).value <=> "zombieSeleccionado.resistencia"
 	}
 
 	override addActions(Panel mainPanel) {
 		val panelDeBotones = new Panel(mainPanel)
 		panelDeBotones.layout = new ColumnLayout(2)
+		
 		val botonera = new Panel(panelDeBotones)
 		botonera.layout = new ColumnLayout(2)
-		new Button(botonera).setCaption("JardinZen").onClick[|irAlJardinZen()]
-		new Button(botonera).setAsDefault.setCaption("Jugar").onClick[|salir]
+		
+		new Button(botonera) => [
+			caption = "JardinZen"
+			onClick[|irAlJardinZen()] 
+		]
+		new Button(botonera) => [
+			setAsDefault
+			caption = "Jugar"
+			onClick[|salir]
+		]
 	}
 
 	def showAllZombies() {
-		modelObject.zombies = modelObject.homeZombies.search("")
+		modelObject.zombies = modelObject.repoZombies.search("")
 	}
 
 	def salir() {
@@ -94,14 +106,18 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 		val table = new Table<Zombie>(mainPanel, typeof(Zombie)) => [
 			height = 160
 			width = 120
-			bindItemsToProperty("zombies")
-			bindValueToProperty("zombieSeleccionado")
+			items <=> "zombies"
+			value <=> "zombieSeleccionado"
 		]
 		this.describeResultsGrid(table)
 	}
 
 	def describeResultsGrid(Table<Zombie> table) {
-		new Column<Zombie>(table).setTitle("Zombie").setFixedSize(75).bindContentsToProperty("nombre")
+		new Column<Zombie>(table) => [
+			title = "Zombie"
+			fixedSize = 75
+			bindContentsToProperty("nombre")
+		]
 	}
 
 }

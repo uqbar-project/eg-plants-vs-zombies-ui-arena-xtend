@@ -1,6 +1,5 @@
 package org.uqbar.arena.examples.plantsvszombies.ui
 
-import org.apache.commons.lang.StringUtils
 import org.uqbar.arena.bindings.NotNullObservable
 import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombiesModel
 import org.uqbar.arena.examples.plantsvszombies.jardin.Fila
@@ -9,14 +8,16 @@ import org.uqbar.arena.layout.VerticalLayout
 import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Label
 import org.uqbar.arena.widgets.List
+import org.uqbar.arena.widgets.NumericField
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.arena.widgets.Selector
-import org.uqbar.arena.widgets.TextBox
 import org.uqbar.arena.widgets.tables.Column
 import org.uqbar.arena.widgets.tables.Table
 import org.uqbar.arena.windows.Dialog
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.WindowOwner
+
+import static extension org.uqbar.arena.xtend.ArenaXtendExtensions.*
 
 class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
@@ -27,7 +28,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	override def createMainTemplate(Panel mainPanel) {
-		mainPanel.setLayout(new VerticalLayout)
+		mainPanel.layout = new VerticalLayout
 		createFormPanel(mainPanel)
 	}
 
@@ -40,55 +41,70 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 	def addActionsPanel(Panel mainPanel) {
 		new List<String>(mainPanel) => [
-			bindItemsToProperty("recompensaObserver.log")
+			items <=> "recompensaObserver.log"
 			height = 70
 			width = 150
 		]
 	}
 
 	override protected addActions(Panel actionsPanel) {
-		new Button(actionsPanel).setCaption("Ir al jardin Zen").onClick[|this.verJardinZen]
-		new Button(actionsPanel).setCaption("Reiniciar").onClick(|this.reiniciarJuego)
-		new Button(actionsPanel).setCaption("Almanaque").onClick[|this.verAlmanaqueZombie]
+		new Button(actionsPanel) => [
+			caption = "Ir al jardin Zen"
+			onClick[|this.verJardinZen]
+		]
+		new Button(actionsPanel) => [
+			caption = "Reiniciar"
+			onClick(|this.reiniciarJuego) 
+		]
+		new Button(actionsPanel) => [
+			caption = "Almanaque"
+			onClick[|this.verAlmanaqueZombie]	
+		]
 	}
 
 	def addPlantinesPanel(Panel mainPanel) {
 		//Panel de pantines
-		val plantinesPanelContenedor = new Panel(mainPanel)
-		plantinesPanelContenedor.setLayout(new ColumnLayout(1))
+		val plantinesPanelContenedor = new Panel(mainPanel) => [
+			layout = new ColumnLayout(1)
+		]
 
-		val plantasPanel = new Panel(plantinesPanelContenedor)
-		plantasPanel.setLayout(new ColumnLayout(1))
-		new Label(plantasPanel).setText("Plantas")
-		new Label(plantasPanel).setText("Elige el plantin y la posicion")
+		val plantasPanel = new Panel(plantinesPanelContenedor) => [
+			layout = new ColumnLayout(1)
+		]
+		new Label(plantasPanel).text = "Plantas"
+		new Label(plantasPanel).text = "Elige el plantin y la posicion"
 
 		val actionsPlantinesContenedor = new Panel(mainPanel)
-		actionsPlantinesContenedor.setLayout(new ColumnLayout(1))
+		actionsPlantinesContenedor.layout = new ColumnLayout(1)
 		val plantinesPanel = new Panel(actionsPlantinesContenedor)
-		plantinesPanel.setLayout(new ColumnLayout(5))
+		plantinesPanel.layout = new ColumnLayout(5)
 
 		new Selector(plantinesPanel).allowNull(false) => [
 			width = 100
-			bindItemsToProperty("jardinZen.plantas")
-			bindValueToProperty("plantinSeleccionado")
+			items <=> "jardinZenJuego.plantas"
+			value <=> "plantinSeleccionado"
 		]
 
-		new Label(plantinesPanel).setText("Tipo de planta:")
-		new Label(plantinesPanel).setWidth(90).bindValueToProperty("plantinSeleccionado.tipo")
-
-		new Label(plantinesPanel).setText("Columna")
-		new TextBox(plantinesPanel) => [
-			withFilter[event|StringUtils.isNumeric(event.potentialTextResult)]
-			bindValueToProperty("columnaAPlantar")	
+		new Label(plantinesPanel).text = "Tipo de planta:"
+		new Label(plantinesPanel) => [
+			width = 90
+			value <=> "plantinSeleccionado.tipo"
 		]
 
-		new Button(plantinesPanel).setCaption("Plantar") => [
+		new Label(plantinesPanel).text = "Columna"
+		new NumericField(plantinesPanel) => [
+			value <=> "columnaAPlantar"	
+		]
+
+		new Button(plantinesPanel) => [
+			caption = "Plantar"
 			onClick[| modelObject.plantar ]
 			bindEnabled(new NotNullObservable("plantinSeleccionado"))
 			disableOnError
 		]
 
-		new Button(plantinesPanel).setCaption("Mejorar") => [
+		new Button(plantinesPanel) => [
+			caption = "Mejorar"
 			onClick[|verMejorarWindow]
 			bindEnabled(new NotNullObservable("plantinSeleccionado"))
 			disableOnError			
@@ -97,47 +113,57 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 
 	def addButtons(Panel mainPanel) {
 		val buttonsPanel = new Panel(mainPanel)
-		buttonsPanel.setLayout(new ColumnLayout(7))
-		new Label(buttonsPanel).setText("Zombie:")
-		new Label(buttonsPanel).setWidth(90).bindValueToProperty("zombieSeleccionado")
+		buttonsPanel.layout = new ColumnLayout(7)
+		new Label(buttonsPanel).text = "Zombie:"
+		new Label(buttonsPanel) => [
+			width = 90
+			value <=> "zombieSeleccionado"
+		]
 		this.addActions(buttonsPanel)
-		new Label(buttonsPanel).setText("Recursos: ")
-		new Label(buttonsPanel).setWidth(90).bindValueToProperty("jugador.recursos")
-		new Label(buttonsPanel).setText("Jardin")
+		new Label(buttonsPanel).text = "Recursos: "
+		new Label(buttonsPanel) => [
+			width = 90
+			value <=> "jugadorActual.recursos"
+		]
+		new Label(buttonsPanel).text = "Jardin"
 	}
 
 	def addPanelPlantasyZombies(Panel mainPanel) {
 		//Planel de plantas
 		val panelDePlantas = new Panel(mainPanel).setWidth(300)
-		panelDePlantas.setLayout(new ColumnLayout(2))
+		panelDePlantas.layout = new ColumnLayout(2)
 		val panelGrillaPlantas = new Panel(panelDePlantas)
 		this.createResultsGrid(panelGrillaPlantas)
 
 		//Panel ZOMBIE
 		val panelDeZombie = new Panel(panelDePlantas)
-		panelDeZombie.setLayout(new ColumnLayout(2))
-		new Label(panelDeZombie).setText("Zombies")
-		new Label(panelDeZombie).setText("Elige el zombie y la fila")
+		panelDeZombie.layout = new ColumnLayout(2)
+		new Label(panelDeZombie).text = "Zombies"
+		new Label(panelDeZombie).text = "Elige el zombie y la fila"
 
-		new Label(panelDeZombie).setText("Zombie:")
+		new Label(panelDeZombie).text = "Zombie:"
 		new Selector(panelDeZombie).allowNull(false) => [
 			width = 150
-			bindItemsToProperty("zombies")
-			bindValueToProperty("zombieSeleccionado")			
+			items <=> "zombies"
+			value <=> "zombieSeleccionado"			
 		]
 
-		new Button(panelDeZombie).setAsDefault.setCaption("Atacar") => [
-			onClick[|atacar]
+		new Button(panelDeZombie) => [
+			caption = 'Atacar'
+			onClick [|atacar]
 			bindEnabled(new NotNullObservable("zombieSeleccionado"))
 			disableOnError			
+			setAsDefault
 		]
 	}
 
 	def atacar() {
 		if (!finalizoElJuego) {
-			modelObject.atacar
-			modelObject.actualizarListaZombies
-			modelObject.actualizarListaPlantas
+			modelObject => [
+				atacar
+				actualizarListaZombies
+				actualizarListaPlantas
+			]
 			finalizoElJuego
 		}
 	}
@@ -155,10 +181,11 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def reiniciarJuego() {
-		val reiniciarWindow = new ConfirmacionWindow(this, modelObject)
-		reiniciarWindow.mensaje = "¿Estas seguro que deseas reiniciar el juego?"
-		reiniciarWindow.onAccept[|modelObject.inicializarElemntosDeJuego]
-		reiniciarWindow.onAccept[|modelObject.actualizarListaPlantas]
+		val reiniciarWindow = new ConfirmacionWindow(this, modelObject) => [
+			mensaje = "¿Estas seguro que deseas reiniciar el juego?"
+			onAccept[|modelObject.inicializarElementosDeJuego]
+			onAccept[|modelObject.actualizarListaPlantas]
+		]
 		this.openDialog(reiniciarWindow)
 	}
 
@@ -170,37 +197,48 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 		this.describeResultsGrid(new Table<Fila>(mainPanel, typeof(Fila)) => [
 			height = 375
 			width = 500
-			bindItemsToProperty("jardinDeJuego.filas")
-			bindValueToProperty("filaSeleccionada")
+			items <=> "jardinDeJuego.filas"
+			value <=> "filaSeleccionada"
 		])
 	}
 
 	def describeResultsGrid(Table<Fila> table) {
-		new Column<Fila>(table).setTitle("Terreno").setFixedSize(75).bindContentsToProperty("tipo")
+		new Column<Fila>(table) => [
+			title = "Terreno"
+			fixedSize = 75
+			bindContentsToProperty("tipo")
+		]
 
 		val cantidadDeColumnas = modelObject.jardinDeJuego.numeroDeCasillerosPorFila
 		for (Integer i : 0 .. cantidadDeColumnas - 1) {
-			new Column<Fila>(table).setTitle((i + 1).toString).setWeight(50).
-				bindContentsToTransformer(new TransformerDeFila(i))
+			new Column<Fila>(table) => [
+				title = (i + 1).toString
+				weight = 50
+				bindContentsToProperty("casilleros").transformer = new TransformerDeFila(i)
+			]
 		}
 	}
 
 	def finalizoElJuego() {
-		val findDelJuegoWindow = new ConfirmacionWindow(this, modelObject)
-		findDelJuegoWindow.onAccept[|modelObject.inicializarElemntosDeJuego]
-		findDelJuegoWindow.onAccept[|modelObject.actualizarListaPlantas]
+		val findDelJuegoWindow = new ConfirmacionWindow(this, modelObject) => [
+			onAccept[|modelObject.inicializarElementosDeJuego]
+			onAccept[|modelObject.actualizarListaPlantas]
+		]
 
 		var fin = false
 		if (modelObject.ganoElJuego) {
-			findDelJuegoWindow.mensaje = "Felicitaciones!!! Has ganado el juego. ¿Jugar de nuevo?"
 			fin = true
-			this.openDialog(findDelJuegoWindow)
+			popupFinDelJuego(findDelJuegoWindow, "Felicitaciones!!! Has ganado el juego. ¿Jugar de nuevo?")
 		} else if (modelObject.perdioElJuego) {
-			findDelJuegoWindow.mensaje = "Has perdido. ¿Jugar de nuevo?"
 			fin = true
-			this.openDialog(findDelJuegoWindow)
+			popupFinDelJuego(findDelJuegoWindow, "Has perdido. ¿Jugar de nuevo?")
 		}
-		return fin
+		fin
+	}
+	
+	def popupFinDelJuego(ConfirmacionWindow findDelJuegoWindow, String mensajeFin) {
+		findDelJuegoWindow.mensaje = mensajeFin
+		this.openDialog(findDelJuegoWindow)
 	}
 
 }

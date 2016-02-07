@@ -1,10 +1,10 @@
 package org.uqbar.arena.examples.plantsvszombies.ui
 
-import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombiesModel
-import org.uqbar.arena.widgets.TextFilter
-import org.uqbar.arena.widgets.TextInputEvent
-import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
 import java.util.List
+import org.uqbar.arena.examples.plantsvszombies.application.model.PlantsVsZombiesModel
+import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
+import org.uqbar.arena.filters.TextFilter
+import org.uqbar.arena.widgets.TextInputEvent
 
 class ZombieSearchFilter implements TextFilter {
 
