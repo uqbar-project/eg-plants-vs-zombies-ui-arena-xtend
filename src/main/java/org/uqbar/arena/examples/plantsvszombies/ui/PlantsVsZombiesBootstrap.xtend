@@ -11,7 +11,7 @@ import org.uqbar.arena.examples.plantsvszombies.repo.RepoMejoras
 import org.uqbar.arena.examples.plantsvszombies.repo.RepoPlantas
 import org.uqbar.arena.examples.plantsvszombies.repo.RepoZombies
 import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
-import org.uqbar.commons.utils.ApplicationContext
+import org.uqbar.commons.applicationContext.ApplicationContext
 
 class PlantsVsZombiesBootstrap extends CollectionBasedBootstrap {
 

@@ -8,7 +8,7 @@ import org.uqbar.arena.examples.plantsvszombies.repo.RepoPlantas
 import org.uqbar.arena.examples.plantsvszombies.repo.RepoZombies
 import org.uqbar.arena.examples.plantsvszombies.zombie.Zombie
 import org.uqbar.arena.windows.Window
-import org.uqbar.commons.utils.ApplicationContext
+import org.uqbar.commons.applicationContext.ApplicationContext
 
 class PlantsVsZombiesApplication extends Application {
 	
