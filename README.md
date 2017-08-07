@@ -1,5 +1,7 @@
 # Plants vs. Zombies
 
+[![Build Status](https://travis-ci.org/uqbar-project/eg-plants-vs-zombies-ui-arena-xtend.svg?branch=master)](https://travis-ci.org/uqbar-project/eg-plants-vs-zombies-ui-arena-xtend)
+
 ![plants-vs-zombies](https://cloud.githubusercontent.com/assets/4549002/17307062/97ab80fc-5809-11e6-8760-a678f7baf70e.png)
 
 Un ejemplo completo de un TP, en el mismo proyecto hay componentes de dominio y de UI.
