@@ -111,7 +111,7 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 		val rightPanel = new Panel(buttonPanel)
 		rightPanel.layout = new ColumnLayout(3)
 		
-		val comprarButton = new Button(rightPanel) => [
+		new Button(rightPanel) => [
 			caption = "Comprar"
 			onClick[|comprar]
 			bindEnabled(new NotNullObservable("mejoraDisponibleSeleccionada"))
