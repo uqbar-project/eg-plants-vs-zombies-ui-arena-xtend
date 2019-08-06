@@ -17,9 +17,9 @@ class PlantsVsZombiesApplication extends Application {
 	}
 	
 	static def void main(String[] args) { 
-		ApplicationContext.instance.configureSingleton(typeof(Planta), new RepoPlantas)
-		ApplicationContext.instance.configureSingleton(typeof(Mejora), new RepoMejoras)
-		ApplicationContext.instance.configureSingleton(typeof(Zombie), new RepoZombies)
+		ApplicationContext.instance.configureSingleton(Planta, new RepoPlantas)
+		ApplicationContext.instance.configureSingleton(Mejora, new RepoMejoras)
+		ApplicationContext.instance.configureSingleton(Zombie, new RepoZombies)
 		new PlantsVsZombiesApplication(new PlantsVsZombiesBootstrap).start()
 	}
 

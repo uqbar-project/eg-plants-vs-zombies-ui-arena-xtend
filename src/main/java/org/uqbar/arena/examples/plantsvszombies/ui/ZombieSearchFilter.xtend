@@ -18,14 +18,14 @@ class ZombieSearchFilter implements TextFilter {
 
 	override accept(TextInputEvent event) {
 		val unZombie = event.potentialTextResult
-		
+
 		var todos = zombies
 		if (unZombie.nullOrEmpty) {
 			todos = todos.toList
 		} else {
-			 todos = todos.filter[z|z.toString().toLowerCase().contains(unZombie.trim.toLowerCase())].toList
+			todos = todos.filter[z|z.toString().toLowerCase().contains(unZombie.trim.toLowerCase())].toList
 		}
-		
+
 		gameModel.zombies = todos.toList
 		true
 	}

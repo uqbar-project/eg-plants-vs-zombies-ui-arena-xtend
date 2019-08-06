@@ -16,7 +16,7 @@ import org.uqbar.commons.applicationContext.ApplicationContext
 class PlantsVsZombiesBootstrap extends CollectionBasedBootstrap {
 
 	override run() {
-		(ApplicationContext.instance.getSingleton(typeof(Planta)) as RepoPlantas) => [
+		(ApplicationContext.instance.getSingleton(Planta) as RepoPlantas) => [
 			// Plantas
 			create(create("Meduza", 45, 20, new TipoAcuatica))
 			create(create("Waterprof", 50, 1, new TipoAcuatica))
@@ -36,7 +36,7 @@ class PlantsVsZombiesBootstrap extends CollectionBasedBootstrap {
 		]
 
 		// Mejoras
-		(ApplicationContext.instance.getSingleton(typeof(Mejora)) as RepoMejoras) => [
+		(ApplicationContext.instance.getSingleton(Mejora) as RepoMejoras) => [
 			create(new MejoraDefensiva(10, 100))
 			create(new MejoraDefensiva(20, 200))
 			create(new MejoraDefensiva(30, 300))
@@ -46,7 +46,7 @@ class PlantsVsZombiesBootstrap extends CollectionBasedBootstrap {
 		]
 		
 		// Mejoras
-		(ApplicationContext.instance.getSingleton(typeof(Zombie)) as RepoZombies) => [
+		(ApplicationContext.instance.getSingleton(Zombie) as RepoZombies) => [
 			create("Valeent", 90, 20)
 			create("Vitto", 88, 45)
 			create("Yahn", 79, 83)

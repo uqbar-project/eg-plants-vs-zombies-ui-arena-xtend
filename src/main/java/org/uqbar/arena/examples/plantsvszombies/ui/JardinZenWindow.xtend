@@ -80,7 +80,7 @@ class JardinZenWindow extends Dialog<PlantsVsZombiesModel> {
 
 	def protected createResultsGrid(Panel mainPanel) {
 		this.describeResultsGrid(
-			new Table<Planta>(mainPanel, typeof(Planta)) => [
+			new Table<Planta>(mainPanel, Planta) => [
 				height = 180
 				width = 300
 				items <=> "plantas"

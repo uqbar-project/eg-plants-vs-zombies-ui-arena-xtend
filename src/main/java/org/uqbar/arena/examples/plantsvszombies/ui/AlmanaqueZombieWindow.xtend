@@ -21,7 +21,7 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 		super(owner, model)
 	}
 
-	override def createMainTemplate(Panel mainPanel) {
+	override createMainTemplate(Panel mainPanel) {
 		createFormPanel(mainPanel)
 
 		//Titulos
@@ -29,7 +29,6 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	override protected createFormPanel(Panel mainPanel) {
-
 		//Panel general de busqueda de panel
 		val buscadorPanel = new Panel(mainPanel)
 
@@ -49,7 +48,7 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 		addActions(mainPanel)
 	}
 
-	def addBuscadorPanel(Panel buscadorPanel) {
+	def void addBuscadorPanel(Panel buscadorPanel) {
 		//Panel de info del zombie
 		new Label(buscadorPanel).text = "Nombre:"
 		new Label(buscadorPanel) => [
@@ -103,7 +102,7 @@ class AlmanaqueZombieWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	def protected createResultsGrid(Panel mainPanel) {
-		val table = new Table<Zombie>(mainPanel, typeof(Zombie)) => [
+		val table = new Table<Zombie>(mainPanel, Zombie) => [
 			height = 160
 			width = 120
 			items <=> "zombies"

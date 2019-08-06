@@ -27,7 +27,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 		taskDescription = "Seleccione el zombie y la fila a atacar."
 	}
 
-	override def createMainTemplate(Panel mainPanel) {
+	override createMainTemplate(Panel mainPanel) {
 		mainPanel.layout = new VerticalLayout
 		createFormPanel(mainPanel)
 	}
@@ -194,7 +194,7 @@ class JardinDeJuegoWindow extends SimpleWindow<PlantsVsZombiesModel> {
 	}
 
 	def protected createResultsGrid(Panel mainPanel) {
-		this.describeResultsGrid(new Table<Fila>(mainPanel, typeof(Fila)) => [
+		this.describeResultsGrid(new Table<Fila>(mainPanel, Fila) => [
 			height = 375
 			width = 500
 			items <=> "jardinDeJuego.filas"

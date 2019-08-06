@@ -25,7 +25,7 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 		
 	}
 
-	override def createMainTemplate(Panel mainPanel) {
+	override createMainTemplate(Panel mainPanel) {
 		createFormPanel(mainPanel)
 	}
 
@@ -77,7 +77,7 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	def protected createResultsGridMejoras(Panel mainPanel, String itemProperty, String valueProperty, int aWith) {
-		new Table<Mejora>(mainPanel, typeof(Mejora)) => [
+		new Table<Mejora>(mainPanel, Mejora) => [
 			height = 180
 			width = aWith
 			items <=> itemProperty
@@ -143,12 +143,7 @@ class MejoraWindow extends Dialog<PlantsVsZombiesModel> {
 	}
 
 	def actualizarTablas() {
-		var mejoras = modelObject.mejoras
-		modelObject.mejoras = null
-		modelObject.mejoras = mejoras
-
-		mejoras = modelObject.mejorasCompradas
-		modelObject.mejorasCompradas = null
-		modelObject.mejorasCompradas = mejoras
+		modelObject.mejoras = newArrayList(modelObject.mejoras)
+		modelObject.mejorasCompradas = newArrayList(modelObject.mejoras)
 	}
 }
